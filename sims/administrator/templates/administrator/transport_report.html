@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transport Report</title>
+  <style>
+    #transport_report {
+      
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    #transport_report td, #transport_report th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    
+    #transport_report tr:nth-child(even){background-color: #f2f2f2;}
+    
+    #transport_report tr:hover {background-color: #ddd;}
+    
+    #transport_report th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    }
+    </style>
+</head>
+<body>
+  <table id="transport_report">
+    <tr>
+      <th>Name</th>
+      <th>Grade</th>
+    </tr>
+    {% for student in students %}
+      <tr>
+        <td> {{student.user.first_name}} {{student.user.middle_name}} {{student.user.last_name}} </td>
+        <td>{{student.current_grade}}</td>
+      </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'administrator/admin_base.html' %}
+{% block body %}
+    <div class="w3-container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }} w3-panel w3-green w3-border w3-round"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <h1 >Administrator Dashboard</h1>
+        
+        <hr>
+        <h3 class="w3-container">Statistics</h3>
+        <div class="w3-container  w3-round">
+        
+                    <div class="w3-panel w3-blue w3-border-left w3-large w3-rightbar w3-animate-right ">
+                        <p>
+                            Number of Students: <span class="">{{context.number_of_students}}</span>
+                        </p>
+                    </div>
+                    <br>
+                    <div class="w3-panel w3-blue w3-border-left w3-large w3-rightbar w3-animate-right">
+                        <p>
+                            Number of Students with Fees Arrears: {{context.records }}
+                        </p>
+                    </div>
+                    <br>
+                    <div class="w3-panel w3-blue w3-border-left w3-large w3-rightbar w3-animate-right">
+                        <p>
+                            Number of Students Taking Lunch: {{context.lunch_subscribers}}
+                        </p>
+                    </div>
+                    <br>
+                    <div class="w3-panel w3-blue w3-border-left w3-large w3-rightbar w3-animate-right">
+                        <p>
+                            Number of Students taking transport: {{context.transport_subscribers}}
+                        </p>
+                    </div>
+
+        </div>
+        </div>
+{% endblock body %}

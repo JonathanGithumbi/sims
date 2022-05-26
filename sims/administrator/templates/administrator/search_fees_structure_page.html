@@ -1,0 +1,46 @@
+{% extends 'administrator/admin_base.html' %}
+{% block body %}
+    <div class="w3-container">
+        <form action="{% url 'search_fees_structure' %}" method="post" class="w3-container w3-border w3-round w3-light-grey">
+            <h2>Fees Structure Search Form</h2>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Search" class="w3-button w3-blue w3-round">
+            <br>
+            <br>
+        </form>
+        <br>
+        <hr>
+        {% if fees_struc %}
+            <table class="w3-table-all">
+                <tr>
+                    <th>Year</th>
+                    <th>Term</th>
+                    <th>Grade</th>
+                    <th>Admission</th>
+                    <th>Diary Report Book</th>
+                    <th>Interview Fee</th>
+                    <th>Tuition Fee</th>
+                    <th>Computer Lessons</th>
+                    <th>Hot Lunch</th>
+                    <th>Transport</th>
+
+                </tr>
+                <tr>
+                    <td>{{ fees_struc.year }}</td>
+                    <td>{{ fees_struc.term }}</td>
+                    <td>{{ fees_struc.grade }}</td>
+                    <td>{{ fees_struc.admission }}</td>
+                    <td>{{ fees_struc.diary_and_report_book }}</td>
+                    <td>{{fees_struc.interview_fee}}</td>
+                    <td>{{ fees_struc.tuition_fee }}</td>
+                    <td>{{fees_struc.computer_lessons}} </td>
+                    <td>{{ fees_struc.hot_lunch }}</td>
+                    <td>
+                        <a href="{% url 'update_fees_structure' fees_struc.id %}" class="w3-button w3-blue w3-round w3-small">Update</a>
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+{% endblock body %}

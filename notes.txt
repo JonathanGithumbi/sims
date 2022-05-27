@@ -53,3 +53,6 @@ hot lunch option, otherwise termly accoun crediting defaults to false on optiona
 26-05-2022
 - add slide in animation for administrator's dashboard informatics
 - I cant hash a user's password when creating an administrator.Check the CustomUser, UserAdmin relationship
+
+27-05-2022
+- Add background images on the login page from the flyer

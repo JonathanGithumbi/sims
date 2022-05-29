@@ -17,6 +17,8 @@ class FinancialAccount(models.Model):
     )
     transaction_type = models.CharField(max_length=7,choices=TRANSACTION_TYPE_CHOICES,default='credit')
     date_of_payment = models.DateTimeField(auto_now_add=True)
+    for_term = models.IntegerField(default=1)
+    for_year = models.IntegerField(default=2022)
     amount = models.DecimalField(max_digits=8,decimal_places=2)
     arrears = models.DecimalField(max_digits=8,decimal_places=2)
     student = models.ForeignKey(Student,on_delete=models.CASCADE)

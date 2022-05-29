@@ -57,3 +57,5 @@ hot lunch option, otherwise termly accoun crediting defaults to false on optiona
 	-i need to set  up a signal that goes off when it is a new term, and then credits the account again given the 
 - POLICY: MIGRATION POLICY: migrating records will be done starting from the latest year, backwards on a yearly basis
  - POLICY: RECORDS will be updated from the latest term to the previous years' terms as far back as ye
+
+- what is the situation with diary and report book is it a yearly tthing or?

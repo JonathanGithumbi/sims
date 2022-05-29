@@ -54,6 +54,7 @@ def date_range(start,end):
 def get_term(date):
     """This method returns the term number (int) given the date """
     """Uses date_range() to retrieve the list of days in a term"""
+    """It works as long as the time on the datetime instances of AcademicCaalendar are set to 00:00 (midnight)"""
     calendar = AcademicCalendar.objects.get(year=date.year)
     term_1_start_date = calendar.term_1_start_date
     term_1_end_date = calendar.term_1_end_date
@@ -75,6 +76,7 @@ def get_term(date):
 
 def get_term_amount(date,grade,lunch,transport,transport_fee):#Lunch and transport are optionals 
     """This function retrieves the fees due for a given term, provided the current date"""
+    """this date is a datetime.now() instance from when the student is being regisetred"""
     """it returns the amount due for a given term ther amount will be negative to indicate amout is due"""
     """This method is used only during student registration, a separate function get_term_amount_continous() calculates the amount for continuing students """
     #date is a datetime instance
@@ -88,7 +90,8 @@ def get_term_amount(date,grade,lunch,transport,transport_fee):#Lunch and transpo
         amount = amount + transport_fee
     if transport and lunch :
         amount = amount + transport_fee + fee.hot_lunch
-    
+    if not transport and not lunch:
+        amount = amount
     return -abs(amount)
 @login_required
 def register_student(request):
@@ -140,9 +143,11 @@ def register_student(request):
             date = date.replace(tzinfo=pytz.UTC)
             
             #Crediting the student the term's fees "+(-amount)"
-            transaction.amount = get_term_amount(date,student.grade_admitted_to,lunch,transport,transport_fee)
+            transaction.amount = get_term_amount(date,student.grade_admitted_to,lunch,transport,transport_fee)#How much is due for the current term
             transaction.arrears = get_term_amount(date,student.grade_admitted_to,lunch,transport,transport_fee)
             transaction.transaction_type = 'credit'
+            transaction.for_term = get_term(date)
+            transaction.for_year = date.year
             transaction.save()
             messages.add_message(request,messages.SUCCESS,"Student Registered Successfully")
             return HttpResponseRedirect(reverse('student_profile', args=[student.id]))

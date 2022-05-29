@@ -2,13 +2,13 @@
 
 {% block body   %}
 <div class="w3-container">
-    <form action="{% url 'make_payment' student.user.id%}" method="post" class="w3-container w3-display-middle w3-light-grey w3-border">
+    <form action="{% url 'make_payment' student.id%}" method="post" class="w3-container w3-display-middle w3-light-grey w3-border">
         <h2>Payment Form</h2>
         {% csrf_token %}
         {{form.as_p}}
-        <input type="submit" value="Go" class="w3-button w3-blue w3-round">
+        <input type="submit" value="Go" class="w3-button w3-blue w3-round-small">
         <br>
         <br>
     </form>
 </div>
-{% endblock body %}
+{%endblock%}

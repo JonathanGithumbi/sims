@@ -1,26 +1,13 @@
-view left to build:
-    statement download -Done
-    receipt download - Done     
-    reports {'students with high arrears','students taking hot lunch this term','students taking transport this year'} -Done
-    academic calendar( preference to makem  API calls) manual update
-    fee structure -Done
-    print directly - DOne
-
-
-21-05-2022
-- Add date picker for student registration form -Done
-- Add Phone Number field -Done
 
 - Further Recommendations-: Intergrate API to Confirm the status of a transaction
 - Add payment method field in transactions
-- Add todays date on the admin dashboard and other informatics e.g number of students in the system etc -Done
 
 22-05-2022
 - design he logic to graduate a student to the next class
--
 
 23-05-2022
-- how are you going to add existing students and past students
+- how are you going to add existing students and past students- migrate existing students first, then start crediting studednts' account with previous arrears
+
 
 24-05-2022
 - Mpesa Api calls
@@ -48,11 +35,25 @@ hot lunch option, otherwise termly accoun crediting defaults to false on optiona
 - add student status{transferred, completed, continuing}
 - migrting old students will be done after migrating the new ones 
 - add a charge() to charge students 
-- include interview fee in get term amount
-
-26-05-2022
-- add slide in animation for administrator's dashboard informatics
-- I cant hash a user's password when creating an administrator.Check the CustomUser, UserAdmin relationship
 
 27-05-2022
 - Add background images on the login page from the flyer
+- prevent the login page from  expanding when they receive errors on the field
+-spelling error on invalid username 
+- Strucutre  and style the registration form
+-add age to profile info
+- put contact name aand contact number on one row
+- format the payment detail and the statement page
+
+29-05-2022
+- Get the system to credit accoutnts at the start of every term
+- POLICY:the students must be registered only when school reopens
+- POLICY: the logic behind crediting and debiting a students account
+	-students must be credited with the term's total amount due.  For continuing students, this function should not include items which are added to a new students amount.
+	-such as the diary.
+	-debiting is done by the administrattor when they make a payment to a student's account and works to offset the negative amount credited to the account
+	-at the beginning of the term
+
+	-i need to set  up a signal that goes off when it is a new term, and then credits the account again given the 
+- POLICY: MIGRATION POLICY: migrating records will be done starting from the latest year, backwards on a yearly basis
+ - POLICY: RECORDS will be updated from the latest term to the previous years' terms as far back as ye

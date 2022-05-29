@@ -2,6 +2,8 @@ from django.db import models
 from student.models import Student
 
 class FinancialAccount(models.Model):
+    """AKA 'Big Poppa'; all transactions, either credit or debit are FinancialAccount instances,
+     i.e financial transaction instances"""
     class Meta:
         ordering = ['-date_of_payment']
 

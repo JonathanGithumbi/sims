@@ -17,7 +17,9 @@ class Student(models.Model):
         ('male','Male'),
         ('female','Female')
     ]
+    first_name = models.CharField(max_length=30)
     middle_name = models.CharField(_("Middle Name"), max_length=50)
+    last_name = models.CharField(max_length=30)
     gender = models.CharField(max_length = 6, choices= GENDER_CHOICES)
     date_of_birth = models.DateField()
     grade_admitted_to = models.ForeignKey(Grade,on_delete = models.DO_NOTHING)

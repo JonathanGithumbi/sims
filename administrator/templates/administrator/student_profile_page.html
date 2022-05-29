@@ -5,7 +5,7 @@
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
-                    <li {% if message.tags %} class="{{ message.tags }} w3-panel w3-green w3-border w3-round"{% endif %}>{{ message }}</li>
+                    <li {% if message.tags %} class="{{ message.tags }} w3-panel w3-green w3-border w3-round-small"{% endif %}>{{ message }} !</li>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -14,21 +14,17 @@
             <tr><h2>Student Info</h2></tr>
             <tr>
               <th>Name:</th>
-              <td>{{ student.user.first_name }} {{ student.user.middle_name }} {{ student.user.last_name }}</td>
+              <td>{{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}</td>
             </tr>
             <tr>
               <th>Date of Birth:</th>
-              <td>{{ student.user.date_of_birth }}</td>
+              <td>{{ student.date_of_birth }}</td>
             </tr>
             <tr>
               <th>Gender:</th>
-              <td>{{ student.user.gender }}</td>
+              <td>{{ student.gender }}</td>
             </tr>
-            <tr>
-              <th>Email:</th>
-              <td>{{ student.user.email }}</td>
-            </tr>
-            
+                       
             <tr>
               <th>Primary Contact Name:</th>
               <td>{{ student.primary_contact_name }}</td>
@@ -51,14 +47,14 @@
             </tr>
             <tr>
               <th>Transport:</th>
-              <td>{{ student.transport }}</td>
+              <td>{{ student.transport }} @ {{student.transport_fee}}Ksh </td>
             </tr>
           </table>
         <br>
-        <a href="{% url 'update_student' student.user.id %}" class="w3-button w3-blue w3-round">Update Student Details</a>
+        <a href="{% url 'update_student' student.id %}" class="w3-button w3-blue w3-round-small">Update Student Details</a>
         <br>
         <br>
-        <a href=" {% url 'delete_student' student.user.id %} " class="w3-button w3-red w3-round">Delete Student</a>
+        <a href=" {% url 'delete_student' student.id %} " class="w3-button w3-red w3-round-small">Delete Student</a>
         <br>
         <hr>
         <h1>Transaction History</h1>
@@ -79,15 +75,15 @@
                     <td>{{ transaction.amount }}</td>
                     <td>{{ transaction.arrears }}</td>
                     <td>
-                        <a href=" {% url 'download_receipt' transaction.id %} " class="w3-button w3-small w3-blue w3-round">Details</a>
+                        <a href=" {% url 'download_receipt' transaction.id %} " class="w3-button w3-small w3-blue w3-round-small">Details</a>
                     </td>
                 </tr>
             {% endfor %}
         </table>
         <br>
-        <a href=" {% url 'download_statement' student.user.id %}" class="w3-button w3-blue w3-round">Download Statement</a>
+        <a href=" {% url 'download_statement' student.id %}" class="w3-button w3-blue w3-round-small">Download Statement</a>
   
-        <a href=" {% url 'make_payment' student.user.id %}" class="w3-button w3-blue w3-round">Make Payment</a>
+        <a href=" {% url 'make_payment' student.id %}" class="w3-button w3-blue w3-round-small">Make Payment</a>
         <br>
         <br>
     </div>

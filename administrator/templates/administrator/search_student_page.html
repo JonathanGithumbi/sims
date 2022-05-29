@@ -2,11 +2,11 @@
 
 {% block body %}
 <div class="w3-container">
-    <form action="{% url 'search_student'%}" method="post" class="w3-container w3-border w3-round w3-light-grey">
+    <form action="{% url 'search_student'%}" method="post" class="w3-container w3-border w3-round-small w3-light-grey">
         <h2>Search Student Form </h2>
         {% csrf_token %}
         {{form.as_p}}
-        <input type="submit" value="Search" class="w3-button w3-blue w3-round">
+        <input type="submit" value="Search" class="w3-button w3-blue w3-round-small">
         <br>
         <br>
 
@@ -18,7 +18,7 @@
     <ul class="w3-ul w3-border">
         {% for student in students %}
         <li>
-            <a href="{% url 'student_profile' student.user.id %}">{{student.user.first_name}} {{student.user.middle_name}} {{student.user.last_name}}</a>
+            <a href="{% url 'student_profile' student.id %}">{{student.first_name}} {{student.middle_name}} {{student.last_name}}</a>
         </li>
         {%empty%}
         <p>No student exists with that first name </p>

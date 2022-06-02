@@ -1,16 +1,9 @@
 
-- Further Recommendations-: Intergrate API to Confirm the status of a transaction
-- Add payment method field in transactions
 
 22-05-2022
-- design he logic to graduate a student to the next class
-
-23-05-2022
-- how are you going to add existing students and past students- migrate existing students first, then start crediting studednts' account with previous arrears
-
+- design he logic to graduate a student to the next class (PENDING)
 
 24-05-2022
-- Mpesa Api calls
 -receipt should have:
     description
     receipt number
@@ -59,3 +52,26 @@ hot lunch option, otherwise termly accoun crediting defaults to false on optiona
  - POLICY: RECORDS will be updated from the latest term to the previous years' terms as far back as ye
 
 - what is the situation with diary and report book is it a yearly tthing or?
+
+30-05-2022
+-
+- Further Recommendations-: Intergrate API to Confirm the status of a transaction
+- Add payment method field in transactions
+
+- Test whether get_term_amount() produces the correct results
+- if user updates student information, adding something that alters the amount they should pay for that term, 
+  the systems should be able to detect that this change has taken place and adjust the charging accordingly
+- add some javascript to disable the admission button whe a user selects continuing students
+
+
+1-06-2022
+- Add javascript to disable all other inputs, when a user is updating a fee structure attribute so that that only one update at a time can be done on a student
+- Add javascript to disable the transport_fee input, unless the transport checkbox is checked
+- After a specific period, the system will not allow any alteration of records, inorder to preserve data integrity
+- Test whether he update method correctly updates the term's due amoun when student info is updated
+- make receipt show you what items you have paid for and how much .(a receipt)
+- use javascript to disable the charge admission_fee when a user selects continuing student
+- PS: Testing is all aboout imagining the worst case scenario about the user interacting with the system and coding to reveal whether it can happen and when it does, modifying the code to  guar against it
+
+2-06-2022
+- Test whether mmigrating existing students to the systemproduce the required functionality

@@ -1,5 +1,6 @@
 from email.policy import default
 from logging import PlaceHolder
+from random import choices
 from django import forms
 from grade.models import Grade
 from phonenumber_field.formfields import PhoneNumberField
@@ -11,18 +12,24 @@ class StudentRegistrationForm(forms.Form):
         ('male','Male'),
         ('female','Female')
     )
+    STUDENT_TYPE=[
+        ('continuing','Continuing'),
+        ('new','New')
+    ]
+    charge_admission_fee = forms.BooleanField(required=False,widget=forms.CheckboxInput(attrs={'class':'w3-check w3-border w3-round-small'}))
+    student_type = forms.ChoiceField(choices=STUDENT_TYPE, widget=forms.Select(attrs={'class':'w3-select w3-border w3-round-small'}))
     first_name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     middle_name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     last_name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
-    gender = forms.ChoiceField(choices=GENDER_CHOICES, widget=forms.Select(attrs={'class':'w3-input w3-border w3-round-small'}))
+    gender = forms.ChoiceField(choices=GENDER_CHOICES, widget=forms.Select(attrs={'class':'w3-select w3-border w3-round-small'}))
     date_of_birth = forms.DateField(widget=forms.widgets.DateInput(attrs={'class':'w3-input w3-border w3-round-small','type':'date'}), input_formats=['%Y-%m-%d'])
     grade_admitted_to = forms.ModelChoiceField(queryset=Grade.objects.all(), widget=forms.Select(attrs={'class':'w3-input w3-border w3-round-small'}))
     primary_contact_name = forms.CharField( max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     primary_contact_phone_number = PhoneNumberField(widget=PhoneNumberInternationalFallbackWidget)
     secondary_contact_name = forms.CharField( max_length=30, required=False,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     secondary_contact_phone_number = PhoneNumberField(widget=PhoneNumberInternationalFallbackWidget)
-    hot_lunch = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'w3-input w3-border w3-round-small'}))
-    transport = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'w3-input w3-border w3-round-small'}))
+    hot_lunch = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'w3-check w3-border w3-round-small'}))
+    transport = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'w3-check w3-border w3-round-small'}))
     transport_fee = forms.DecimalField(widget=forms.NumberInput(attrs={'class':'w3-input w3-border w3-round-small'}), validators=[validators.MinValueValidator(limit_value=3000,message="Minimum Amount is 3000ksh !")])
 
 
@@ -33,6 +40,18 @@ class SearchStudentForm(forms.Form):
 
 
 class MakePaymentForm(forms.Form):
+    TERM_CHOICES = [
+        ('1','1'),
+        ('2','2'),
+        ('3','3')
+    ]
+    YEAR_CHOICES = [
+        ('2022','2022'),
+        ('2021','2021'),
+        ('2020','2020')
+    ]
+    for_term = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'w3-input w3-border w3-round-small'}))
+    for_year = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     amount = forms.DecimalField(max_digits=8,decimal_places=2, widget=forms.NumberInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     # Transaction number for  API call to paybill/bank acc, for confirmation of transaction status
     #transaction_number = forms.IntegerField()

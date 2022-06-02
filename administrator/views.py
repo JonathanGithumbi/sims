@@ -74,25 +74,51 @@ def get_term(date):
     if date in term_3_days:
         return 3
 
-def get_term_amount(date,grade,lunch,transport,transport_fee):#Lunch and transport are optionals 
+def get_term_amount(date,grade,lunch,transport,charge_admission_fee,transport_fee,student_type):#Lunch and transport are optionals 
     """This function retrieves the fees due for a given term, provided the current date"""
     """this date is a datetime.now() instance from when the student is being regisetred"""
     """it returns the amount due for a given term ther amount will be negative to indicate amout is due"""
     """This method is used only during student registration, a separate function get_term_amount_continous() calculates the amount for continuing students """
     #date is a datetime instance
-    year = date.year#This is the date provided from user.date_joined, during student registration
+    year = date.year#This is the date the student joined
     term = get_term(date)
     fee = FeesStructure.objects.get(year=2022,term=term,grade=grade)
-    amount = fee.admission + fee.diary_and_report_book + fee.tuition_fee + fee.computer_lessons # the amount is the core_amount-'not optionals'
-    if lunch and not transport:
-        amount  = amount+ fee.hot_lunch
-    if transport and not lunch:
-        amount = amount + transport_fee
-    if transport and lunch :
-        amount = amount + transport_fee + fee.hot_lunch
-    if not transport and not lunch:
-        amount = amount
+
+    if student_type == 'new':
+        amount = fee.tuition_fee + fee.computer_lessons + fee.diary_and_report_book + fee.interview_fee
+        if charge_admission_fee:
+            amount = fee.admission_fee+amount
+        if lunch and not transport:
+            amount  = amount+ fee.hot_lunch
+        if transport and not lunch:
+            amount = amount + transport_fee
+        if transport and lunch :
+            amount = amount + transport_fee + fee.hot_lunch
+
+    if student_type == 'continuing':# For migrating continuing students into the system
+        amount = fee.tuition_fee + fee.computer_lessons + fee.diary_and_report_book
+        if lunch and not transport:
+            amount  = amount+ fee.hot_lunch
+        if transport and not lunch:
+            amount = amount + transport_fee
+        if transport and lunch :
+            amount = amount + transport_fee + fee.hot_lunch
+        if not transport and not lunch:
+            amount = amount
     return -abs(amount)
+
+def get_standard_datetime():
+    """This method returns a standard datetime instance that i can use in get_term_amount() to retrieve the amount due for that terms"""
+    #Construct the datetime instance of today (when the student is registered)
+    today = datetime.now(tz=pytz.UTC)
+    year = today.year
+    month = today.month
+    day = today.day
+    date = datetime(year,month,day)
+    #Making the datetime 'timezone aware', so that it can be used by get_term()
+    date = date.replace(tzinfo=pytz.UTC)
+    return date
+
 @login_required
 def register_student(request):
     """This function registers a user, and associates that user to a student which is then associated with a financial account"""
@@ -105,6 +131,7 @@ def register_student(request):
             #Student registration logic
             # 1. Create the student
             student = Student()
+            student.student_type = form.cleaned_data['student_type']
             student.first_name = form.cleaned_data['first_name']
             student.middle_name = form.cleaned_data['middle_name']
             student.last_name = form.cleaned_data['last_name']
@@ -118,6 +145,7 @@ def register_student(request):
             student.secondary_contact_phone_number = form.cleaned_data['secondary_contact_phone_number']
             student.hot_lunch = form.cleaned_data['hot_lunch']
             student.transport = form.cleaned_data['transport']
+            student.charge_admission_fee = form.cleaned_data['charge_admission_fee']
             student.transport_fee = form.cleaned_data['transport_fee']
             student.save()
 
@@ -132,19 +160,15 @@ def register_student(request):
             lunch = form.cleaned_data['hot_lunch']
             transport = form.cleaned_data['transport']
             transport_fee = form.cleaned_data['transport_fee']
+            charge_admission_fee = form.cleaned_data['charge_admission_fee']
+            student_type = form.cleaned_data['student_type']
+            date = get_standard_datetime()
 
-            today = datetime.now(tz=pytz.UTC)
-            year = today.year
-            month = today.month
-            day = today.day
-            date = datetime(year,month,day)
-
-            #Making the datetime 'timezone aware', so that it can be used by get_term()
-            date = date.replace(tzinfo=pytz.UTC)
-            
             #Crediting the student the term's fees "+(-amount)"
-            transaction.amount = get_term_amount(date,student.grade_admitted_to,lunch,transport,transport_fee)#How much is due for the current term
-            transaction.arrears = get_term_amount(date,student.grade_admitted_to,lunch,transport,transport_fee)
+            #Transaction Amount. How Much is the student going to get charged for this term
+            transaction.amount = get_term_amount(date,student.grade_admitted_to,lunch,transport,charge_admission_fee,transport_fee,student_type)#How much is due for the current term
+            transaction.description = "term's fees" 
+            transaction.arrears = get_term_amount(date,student.grade_admitted_to,lunch,transport,charge_admission_fee,transport_fee,student_type)
             transaction.transaction_type = 'credit'
             transaction.for_term = get_term(date)
             transaction.for_year = date.year
@@ -186,9 +210,10 @@ def search_student(request):
 @login_required       
 def update_student(request,id):
     """Updates student details """
+    """updates fees structure when you update fees structure attributes"""
     student = Student.objects.get(pk=id)
-    if request.method == 'GET':
-        data = {
+    data = {
+            'student_type': student.student_type,
             'first_name' : student.first_name,
             'middle_name' : student.middle_name,
             'last_name' : student.last_name, 
@@ -200,39 +225,60 @@ def update_student(request,id):
             'secondary_contact_name' : student.secondary_contact_name,
             'secondary_contact_phone_number' : student.secondary_contact_phone_number,
             'hot_lunch' : student.hot_lunch,
+            'charge_admission_fee':student.charge_admission_fee,
             'transport' : student.transport,
             'transport_fee':student.transport_fee
 
         }
+    if request.method == 'GET':
         form = forms.StudentRegistrationForm(data)
         return render(request, 'administrator/student_update_page.html',{'form':form,'student':student})
     if request.method == 'POST':
-        form = forms.StudentRegistrationForm(request.POST)
+        form = forms.StudentRegistrationForm(request.POST,initial=data)
         if form.is_valid():
-            student.first_name = form.cleaned_data['first_name']
-            student.middle_name = form.cleaned_data['middle_name']
-            student.last_name = form.cleaned_data['last_name']
-            student.date_of_birth = form.cleaned_data['date_of_birth']
-            student.gender = form.cleaned_data['gender']
-            student.grade_admitted_to = form.cleaned_data['grade_admitted_to']
-            student.primary_contact_name = form.cleaned_data['primary_contact_name']
-            student.primary_contact_phone_number = form.cleaned_data['primary_contact_phone_number']
-            student.secondary_contact_name = form.cleaned_data['secondary_contact_name']
-            student.secondary_contact_phone_number = form.cleaned_data['secondary_contact_phone_number']
-            student.hot_lunch = form.cleaned_data['hot_lunch']
-            student.transport = form.cleaned_data['transport']
-            student.transport_fee = form.cleaned_data['transport_fee']
-            student.save()
-
-            messages.add_message(request,messages.SUCCESS,"Student Information Updated Successfully !")
-            
-            return redirect(reverse('student_profile', args=[student.id]))
+            if form.has_changed():
+                changed_data = form.changed_data
+                
+                #these are the changed fees structure attributes which will alter the amount credited for that term which will in turn alter the transaction history of the student 
+                if 'grade_admitted_to' in changed_data or 'hot_lunch' in changed_data or 'transport' in changed_data or 'transport_fee' in changed_data or 'charge_admission_fee' in changed_data:
+                    date = get_standard_datetime()
+                    new_grade = form.cleaned_data['grade_admitted_to']
+                    lunch = form.cleaned_data['hot_lunch']
+                    transport = form.cleaned_data['transport']
+                    transport_fee = form.cleaned_data['transport_fee']
+                    charge_admission_fee = form.cleaned_data['charge_admission_fee']
+                    student_type = form.cleaned_data['student_type']
+                    new_amount = get_term_amount(date,new_grade,lunch,transport,charge_admission_fee,transport_fee,student_type)
+                    #retrieve the term's fees transaction
+                    transaction =student.financialaccount_set.get(transaction_type='credit',description="term's fees",for_year=date.year, for_term=get_term(date))
+                    transaction.amount = new_amount
+                    transaction.arrears = new_amount
+                    transaction.save()
+                student.first_name = form.cleaned_data['first_name']
+                student.middle_name = form.cleaned_data['middle_name']
+                student.last_name = form.cleaned_data['last_name']
+                student.date_of_birth = form.cleaned_data['date_of_birth']
+                student.gender = form.cleaned_data['gender']
+                student.grade_admitted_to = form.cleaned_data['grade_admitted_to']
+                student.primary_contact_name = form.cleaned_data['primary_contact_name']
+                student.primary_contact_phone_number = form.cleaned_data['primary_contact_phone_number']
+                student.secondary_contact_name = form.cleaned_data['secondary_contact_name']
+                student.secondary_contact_phone_number = form.cleaned_data['secondary_contact_phone_number']
+                student.hot_lunch = form.cleaned_data['hot_lunch']
+                student.transport = form.cleaned_data['transport']
+                student.transport_fee = form.cleaned_data['transport_fee']
+                student.save()
+                messages.add_message(request,messages.SUCCESS,"Student infomation updated ")
+                return redirect(reverse('student_profile', args=[student.id]))
+            else:
+                messages.add_message(request,messages.SUCCESS,"No information Altered!")
+                return redirect(reverse('student_profile', args=[student.id]))
         else:
             return render(request, 'administrator/student_update_page.html',{'form':form})
 @login_required
 def delete_student(request, id):
     """Deletes a user which deletes the student which deletes the account"""
-    user = CustomUser.objects.get(pk=id)
+    user = Student.objects.get(pk=id)
     user.delete()
     messages.add_message(request,messages.SUCCESS,'Student Deleted Successfully')
     return redirect(reverse('administrator_dashboard'))

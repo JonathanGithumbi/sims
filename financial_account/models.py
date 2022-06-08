@@ -16,7 +16,7 @@ class FinancialAccount(models.Model):
         ('debit','Debit')
     )
     transaction_type = models.CharField(max_length=7,choices=TRANSACTION_TYPE_CHOICES,default='credit')
-    description = models.CharField(max_length=20,default="term's fees")
+    description = models.CharField(max_length=20,default="term's fees ")
     date_of_payment = models.DateTimeField(auto_now_add=True)
     for_term = models.IntegerField(default=1)
     for_year = models.IntegerField(default=2022)

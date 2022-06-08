@@ -25,7 +25,7 @@ class StudentRegistrationForm(forms.Form):
     date_of_birth = forms.DateField(widget=forms.widgets.DateInput(attrs={'class':'w3-input w3-border w3-round-small','type':'date'}), input_formats=['%Y-%m-%d'])
     grade_admitted_to = forms.ModelChoiceField(queryset=Grade.objects.all(), widget=forms.Select(attrs={'class':'w3-input w3-border w3-round-small'}))
     primary_contact_name = forms.CharField( max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
-    primary_contact_phone_number = PhoneNumberField(widget=PhoneNumberInternationalFallbackWidget)
+    primary_contact_phone_number = PhoneNumberField(widget=PhoneNumberInternationalFallbackWidget(attrs={'class':'w-input w3-round-small'}))
     secondary_contact_name = forms.CharField( max_length=30, required=False,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     secondary_contact_phone_number = PhoneNumberField(widget=PhoneNumberInternationalFallbackWidget)
     hot_lunch = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'w3-check w3-border w3-round-small'}))

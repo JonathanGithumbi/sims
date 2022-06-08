@@ -4,14 +4,6 @@
 - design he logic to graduate a student to the next class (PENDING)
 
 24-05-2022
--receipt should have:
-    description
-    receipt number
-    date:
-    total_paid:
-    amount in words
-    and a table with description amount and cashier signature/stamp
-    and a 'received with thanks on behalf of kings educational centre \n you were served by xxxx'
 
 - Testing
 -i need a way to signal the system that it's a new term and that it should credit all of the students' accounts with the term's CORE fees
@@ -20,13 +12,13 @@ When a student communicates his desire to pay for the optionals, the admin will 
 hot lunch option, otherwise termly accoun crediting defaults to false on optionals and credits only the core amount
     the system needs to have a clock it can refer to on a daily basis
 
--make sure you implemennt logic for changin student.current_grade when they proceed to the next level
+-make sure you implement logic for changin student.current_grade when they proceed to the next level- This will be done withthe same logic that tells the systm that it's a new ter,
 
 25-05-2022
-- work out the 'new term' logic. in context of core fees, optionals, grade graduation etc 
+- work out the 'new term' logic. in context of core fees, optionals, grade graduation etc -[PENDIING]
 - work out the logic of migrating old records into the system
-- add student status{transferred, completed, continuing}
-- migrting old students will be done after migrating the new ones 
+
+- migrting old students will be done after migrating the new ones - wE WONT MIGRATE OLD STUDENTS, we'll migrate old records of 
 - add a charge() to charge students 
 
 27-05-2022
@@ -75,3 +67,13 @@ hot lunch option, otherwise termly accoun crediting defaults to false on optiona
 
 2-06-2022
 - Test whether mmigrating existing students to the systemproduce the required functionality
+
+4/06/2022
+- add javascript effect where the logo sinks in to the login form to become it's background
+- login page errors change the size of the card.size of card should be fixed
+- logo too plain, add piicture effects or set background color
+- pages should transition out of the screen upwards, next page come in from the bottom.
+- use datables for student search form
+- BUG: whe transport is unselected, the form still sends bach the transport fee. FIX: when a user unselects transport, trasport_fee should be set to 0 in the backend and the transport fee box should be disabled i the frontend
+- in the registration form, if transport is not selected, transport_fee should be set to 0, sounds like javascript
+

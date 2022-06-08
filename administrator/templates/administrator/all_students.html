@@ -1,0 +1,30 @@
+{% extends 'administrator/admin_base.html' %}
+
+{% block body %}
+
+<div class="w3-container">
+    <table id="all_students" class="display">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Grade</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{student.first_name}} {{student.middle_name}} {{student.last_name}}</td>
+                <td>{{student.current_grade}}</td>
+                <td><a href="{% url 'student_profile' student.id%}">View Profile</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready( function () {
+        $('#all_students').DataTable();
+    } );
+</script>
+{% endblock body %}

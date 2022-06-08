@@ -35,10 +35,18 @@
 <body>
   <h2></h2>
   {% if transaction %}
- 
+  <hr>
+  <p>Transaction Type: {{transaction.transaction_type}}</p>
+  <p>Name: {{transaction.student.first_name}} {{transaction.student.middle_name}} {{transaction.student.last_name}}</p>
+  <p>Grade : {{transaction.student.current_grade}}</p>
+  <p>Description: {{transaction.description}} </p>
+  <p>For {{transaction.for_year}} Term: {{trasaction.for_term}}</p>
+  <p>Amount: {{transaction.amount}}KSH</p>
+  <hr>
+  <h1>BreakDown</h1>
+  <hr>
 <table id="payment_details">
-    <tr>
-      
+  <tr>  
       <th>Transaction ID</th>
       <th>Transaction Type</th>
       <th>Date of Payment</th>

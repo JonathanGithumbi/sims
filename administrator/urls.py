@@ -18,6 +18,8 @@ urlpatterns = [
     path('generate/fees arrears report',views.generate_fees_arrears_report, name='generate_fees_arrears_report'),
     path('gennerate/lunch subscribers report',views.generate_lunch_subscribers_report, name='generate_lunch_subscribers_report'),
     path('generate/transport subscribers report',views.generate_transport_subscribers_report,name='generate_transport_subscribers_report'),
-    path('migrate records/',views.migrate_records, name='migrate_records')
+    path('migrate records/',views.migrate_records, name='migrate_records'),
+    path('allstudents/',views.get_all_students, name='get_all_students'),
+    path('charge/<int:id>',views.charge_student, name='charge_student')
 
 ]

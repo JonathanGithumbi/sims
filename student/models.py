@@ -32,6 +32,6 @@ class Student(models.Model):
     # optionals 
     hot_lunch = models.BooleanField(default=False)
     transport = models.BooleanField(default=False)
-    charge_admission_fee = models.BooleanField(default=True)
+    charge_admission_fee = models.BooleanField()
     transport_fee = models.IntegerField(default=3000)
     

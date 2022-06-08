@@ -13,7 +13,7 @@ class FeesStructure(models.Model):
     year = models.IntegerField()
     term = models.IntegerField()
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE)
-    admission = models.IntegerField()
+    admission_fee = models.IntegerField()
     diary_and_report_book = models.IntegerField()
     interview_fee = models.IntegerField(default = 300)
     tuition_fee = models.IntegerField()

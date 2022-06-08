@@ -86,7 +86,7 @@ def get_term_amount(date,grade,lunch,transport,charge_admission_fee,transport_fe
 
     if student_type == 'new':
         amount = fee.tuition_fee + fee.computer_lessons + fee.diary_and_report_book + fee.interview_fee
-        if charge_admission_fee:
+        if charge_admission_fee == True:
             amount = fee.admission_fee+amount
         if lunch and not transport:
             amount  = amount+ fee.hot_lunch
@@ -228,7 +228,6 @@ def update_student(request,id):
             'charge_admission_fee':student.charge_admission_fee,
             'transport' : student.transport,
             'transport_fee':student.transport_fee
-
         }
     if request.method == 'GET':
         form = forms.StudentRegistrationForm(data)
@@ -238,7 +237,6 @@ def update_student(request,id):
         if form.is_valid():
             if form.has_changed():
                 changed_data = form.changed_data
-                
                 #these are the changed fees structure attributes which will alter the amount credited for that term which will in turn alter the transaction history of the student 
                 if 'grade_admitted_to' in changed_data or 'hot_lunch' in changed_data or 'transport' in changed_data or 'transport_fee' in changed_data or 'charge_admission_fee' in changed_data:
                     date = get_standard_datetime()
@@ -246,6 +244,8 @@ def update_student(request,id):
                     lunch = form.cleaned_data['hot_lunch']
                     transport = form.cleaned_data['transport']
                     transport_fee = form.cleaned_data['transport_fee']
+                    if transport == False:
+                        transport_fee = 0                                             
                     charge_admission_fee = form.cleaned_data['charge_admission_fee']
                     student_type = form.cleaned_data['student_type']
                     new_amount = get_term_amount(date,new_grade,lunch,transport,charge_admission_fee,transport_fee,student_type)
@@ -267,6 +267,7 @@ def update_student(request,id):
                 student.hot_lunch = form.cleaned_data['hot_lunch']
                 student.transport = form.cleaned_data['transport']
                 student.transport_fee = form.cleaned_data['transport_fee']
+                student.charge_admission_fee = form.cleaned_data['charge_admission_fee']
                 student.save()
                 messages.add_message(request,messages.SUCCESS,"Student infomation updated ")
                 return redirect(reverse('student_profile', args=[student.id]))
@@ -414,3 +415,9 @@ def generate_fees_structure_report(request):
 def migrate_records(request):
     pass
 
+def get_all_students(request):
+    students = Student.objects.all()
+    return render(request, 'administrator/all_students.html',{'students':students})
+
+def charge_student(requst,id):
+    pass

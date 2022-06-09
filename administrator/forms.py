@@ -73,5 +73,20 @@ class FeesStructureUpdateForm(forms.Form):
     hot_lunch = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'w3-input w3-border w3-round-small'}))
 
 
-
+class ChargeStudentForm(forms.Form):
+    TERM_CHOICES = [
+        ('1','1'),
+        ('2','2'),
+        ('3','3')
+    ]
+    YEAR_CHOICES = [
+        ('2022','2022'),
+        ('2021','2021'),
+        ('2020','2020')
+    ]
+    amount = forms.DecimalField(max_digits=8,decimal_places=2, widget=forms.NumberInput(attrs={'class':'w3-input w3-border w3-round-small'})) 
+    description = forms.CharField(max_length=100, required=False,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
+    for_term = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'w3-input w3-border w3-round-small'}))
+    for_year = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'w3-input w3-border w3-round-small'}))
+    
 

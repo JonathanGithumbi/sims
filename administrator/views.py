@@ -419,5 +419,9 @@ def get_all_students(request):
     students = Student.objects.all()
     return render(request, 'administrator/all_students.html',{'students':students})
 
-def charge_student(requst,id):
-    pass
+def charge_student(request,id):
+    if request.method == 'GET':
+        form = forms.ChargeStudentForm()
+        return render(request,'administrator/charge_student.html',{'form':form,'id':id})
+    if request.method == 'POST':
+        pass

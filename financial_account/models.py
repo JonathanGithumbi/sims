@@ -1,7 +1,7 @@
 from django.db import models
 from student.models import Student
 
-class FinancialAccount(models.Model):
+class FinancialAccount(models.Model):# AKA FinancialTransaction
     """AKA 'Big Poppa'; all transactions, either credit or debit are FinancialAccount instances,
      i.e financial transaction instances"""
     class Meta:

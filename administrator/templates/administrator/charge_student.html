@@ -1,0 +1,14 @@
+{% extends 'administrator/admin_base.html' %}
+
+{% block body %}
+<div class="w3-container">
+    <fieldset>
+    <form action="{% url 'charge_student' id%}">
+        <legend>Charge Student Form</legend>
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Ok" class="w3-button w3-blue w3-round-small">
+    </form>
+</fieldset>
+</div>
+{% endblock body %}

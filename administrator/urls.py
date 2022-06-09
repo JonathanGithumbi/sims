@@ -20,6 +20,6 @@ urlpatterns = [
     path('generate/transport subscribers report',views.generate_transport_subscribers_report,name='generate_transport_subscribers_report'),
     path('migrate records/',views.migrate_records, name='migrate_records'),
     path('allstudents/',views.get_all_students, name='get_all_students'),
-    path('charge/<int:id>',views.charge_student, name='charge_student')
+    path('charge/<int:id>/',views.charge_student, name='charge_student')
 
 ]

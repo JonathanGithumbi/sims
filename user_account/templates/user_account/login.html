@@ -2,27 +2,15 @@
 {% load static %}
 {% block body %}
     <div class="w3-container ">
-       
-        <br>
-        <br>
-        <div class="w3-card w3-display-middle w3-border w3-round-small">
+        <div class="w3-card w3-display-middle w3-border w3-border-black w3-round-small">
             <img src="{% static 'user_account/logo.png' %}"
             alt="Logo"
-            class=" w3-image" >
+            style="width:100%" >
             <header class="w3-container w3-light-grey">
                 <h2>Login</h2>
-                <!--{% if messages %}
-            <ul class="messages w3-ul w3-border w3-round-small">
-                {% for message in messages %}
-                    <li {% if message.tags %} class="{{ message.tags }} w3-red w3-padding-small"{% endif %}>{{ message }}!</li>
-                {% endfor %}
-            </ul>
-            {% endif %}-->
-                <ul class="w3-ul">
-                    {% for error in form.non_field_errors %}<li class="w3-red">{{ error }}</li>{% endfor %}
-                </ul>
             </header>
-            <form method="post" action="{% url 'login' %}"  class="w3-container">
+            <form method="post" action="{% url 'login' %}"  class="w3-container w3-light-grey">
+                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
                 {% csrf_token %}
                 {{form.username.errors}}
                 {{ form.username.label_tag }}
@@ -35,8 +23,8 @@
                        value="login"
                        class="w3-btn w3-green w3-block w3-round-small">
                 <input type="hidden" name="next" value="{{ next }}">
+                <br>
             </form>
-            <br>
         </div>
     </div>
 {% endblock body %}

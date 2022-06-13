@@ -18,28 +18,15 @@ def login_view(request):
             password = form.cleaned_data['password']
             user = authenticate(username=email, password=password)
             if user is None:# incorrect username and password
-                form.add_error('username',"Incorrect Usernamen or Password")
+                form.add_error('username',"Incorrect Username or Password")
                 return render(request, 'user_account/login.html',{'form':form})
             else:#legit user
                 login(request, user)
                 return HttpResponseRedirect(reverse('administrator_dashboard'))
 
         else:#Form has errors
-            #return HttpResponse("Nimefika form is not valid")
             return render(request, 'user_account/login.html',{'form':form})
 
-        #email = request.POST['username']
-        #password = request.POST['password']
-        #user = authenticate(username=email,password=password)
-        #if user is not None:
-        #    login(request, user)
-        #    if user.is_administrator:
-        #        return HttpResponseRedirect(reverse('administrator_dashboard'))
-        #    form = LoginForm()
-        #    return render(request,'user_account/login.html',{'form':form})
-        #else:
-        #    messages.add_message(request,messages.ERROR,"Incorrect Username or Password")
-        #    return HttpResponseRedirect(reverse('login'))
     if request.method == 'GET':
         form = LoginForm()
         return render(request,'user_account/login.html',{'form': form})

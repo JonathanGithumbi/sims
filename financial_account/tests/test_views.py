@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-class TestAdminViews(TestCase):
+class TestFinancialAccountViews(TestCase):
     def setUp(self):
         # setup models
         pass

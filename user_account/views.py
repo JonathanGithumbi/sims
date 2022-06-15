@@ -9,7 +9,7 @@ from user_account.forms import LoginForm
 from django.contrib import messages
 from administrator.views import admin_dashboard
 def login_view(request):
-    """This view logs the user in after authenticating using the email fiels as the username"""
+    """This view logs the user in after using the email field as the username. (Uses a custom backend)"""
     if request.method == 'POST':
         #create a form instance and bound post data to it
         form = LoginForm(request.POST)

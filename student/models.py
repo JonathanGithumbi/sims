@@ -17,7 +17,6 @@ class Student(models.Model):
         ('male','Male'),
         ('female','Female')
     ]
-    student_type = models.CharField(max_length=20, default='continuing')
     first_name = models.CharField(max_length=30)
     middle_name = models.CharField(_("Middle Name"), max_length=50)
     last_name = models.CharField(max_length=30)
@@ -32,6 +31,5 @@ class Student(models.Model):
     # optionals 
     hot_lunch = models.BooleanField(default=False)
     transport = models.BooleanField(default=False)
-    charge_admission_fee = models.BooleanField()
     transport_fee = models.IntegerField(default=3000)
     

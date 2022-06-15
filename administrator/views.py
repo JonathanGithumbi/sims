@@ -31,7 +31,6 @@ from .utils import render_to_pdf
 @login_required
 def admin_dashboard(request):
     """This view lands the user on  the administration dashboard"""
-    """Displaying a list of functionalities afforded the administrator """
     number_of_students = Student.objects.all().count()
     records = CurrentBalance.objects.filter(current_balance__lt = 0).count()
     lunch_subscribers = Student.objects.filter(hot_lunch=True).count()

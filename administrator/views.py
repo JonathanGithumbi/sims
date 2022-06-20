@@ -73,7 +73,7 @@ def get_term(date):
     if date in term_3_days:
         return 3
 
-def get_term_amount(date,grade,lunch,transport,charge_admission_fee,transport_fee,student_type):#Lunch and transport are optionals 
+def get_term_amount(date,grade,lunch,transport,transport_fee):#Lunch and transport are optionals 
     """This function retrieves the fees due for a given term, provided the current date"""
     """this date is a datetime.now() instance from when the student is being regisetred"""
     """it returns the amount due for a given term ther amount will be negative to indicate amout is due"""
@@ -83,27 +83,14 @@ def get_term_amount(date,grade,lunch,transport,charge_admission_fee,transport_fe
     term = get_term(date)
     fee = FeesStructure.objects.get(year=2022,term=term,grade=grade)
 
-    if student_type == 'new':
-        amount = fee.tuition_fee + fee.computer_lessons + fee.diary_and_report_book + fee.interview_fee
-        if charge_admission_fee == True:
-            amount = fee.admission_fee+amount
-        if lunch and not transport:
-            amount  = amount+ fee.hot_lunch
-        if transport and not lunch:
-            amount = amount + transport_fee
-        if transport and lunch :
-            amount = amount + transport_fee + fee.hot_lunch
-
-    if student_type == 'continuing':# For migrating continuing students into the system
-        amount = fee.tuition_fee + fee.computer_lessons + fee.diary_and_report_book
-        if lunch and not transport:
-            amount  = amount+ fee.hot_lunch
-        if transport and not lunch:
-            amount = amount + transport_fee
-        if transport and lunch :
-            amount = amount + transport_fee + fee.hot_lunch
-        if not transport and not lunch:
-            amount = amount
+    amount = fee.tuition_fee + fee.computer_lessons + fee.diary_and_report_book + fee.interview_fee + fee.admission_fee
+    if lunch and not transport:
+        amount  = amount+ fee.hot_lunch
+    if transport and not lunch:
+        amount = amount + transport_fee
+    if transport and lunch :
+        amount = amount + transport_fee + fee.hot_lunch
+        
     return -abs(amount)
 
 def get_standard_datetime():
@@ -120,17 +107,15 @@ def get_standard_datetime():
 
 @login_required
 def register_student(request):
-    """This function registers a user, and associates that user to a student which is then associated with a financial account"""
+    """This function registers a student which is then associated with a financial account"""
     if request.method == 'GET':
         form = forms.StudentRegistrationForm()
         return render(request,'administrator/student_registration_page.html',{'form':form})
     if request.method =='POST':
-        form = forms.StudentRegistrationForm(request.POST)# request.Files to retrieve the image file
+        form = forms.StudentRegistrationForm(request.POST)
         if form.is_valid():
-            #Student registration logic
             # 1. Create the student
             student = Student()
-            student.student_type = form.cleaned_data['student_type']
             student.first_name = form.cleaned_data['first_name']
             student.middle_name = form.cleaned_data['middle_name']
             student.last_name = form.cleaned_data['last_name']
@@ -144,7 +129,6 @@ def register_student(request):
             student.secondary_contact_phone_number = form.cleaned_data['secondary_contact_phone_number']
             student.hot_lunch = form.cleaned_data['hot_lunch']
             student.transport = form.cleaned_data['transport']
-            student.charge_admission_fee = form.cleaned_data['charge_admission_fee']
             student.transport_fee = form.cleaned_data['transport_fee']
             student.save()
 
@@ -159,15 +143,13 @@ def register_student(request):
             lunch = form.cleaned_data['hot_lunch']
             transport = form.cleaned_data['transport']
             transport_fee = form.cleaned_data['transport_fee']
-            charge_admission_fee = form.cleaned_data['charge_admission_fee']
-            student_type = form.cleaned_data['student_type']
             date = get_standard_datetime()
 
             #Crediting the student the term's fees "+(-amount)"
             #Transaction Amount. How Much is the student going to get charged for this term
-            transaction.amount = get_term_amount(date,student.grade_admitted_to,lunch,transport,charge_admission_fee,transport_fee,student_type)#How much is due for the current term
+            transaction.amount = get_term_amount(date,student.grade_admitted_to,lunch,transport,transport_fee)#How much is due for the current term
             transaction.description = "term's fees" 
-            transaction.arrears = get_term_amount(date,student.grade_admitted_to,lunch,transport,charge_admission_fee,transport_fee,student_type)
+            transaction.arrears = get_term_amount(date,student.grade_admitted_to,lunch,transport,transport_fee)
             transaction.transaction_type = 'credit'
             transaction.for_term = get_term(date)
             transaction.for_year = date.year

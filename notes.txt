@@ -77,3 +77,8 @@ hot lunch option, otherwise termly accoun crediting defaults to false on optiona
 - BUG: whe transport is unselected, the form still sends bach the transport fee. FIX: when a user unselects transport, trasport_fee should be set to 0 in the backend and the transport fee box should be disabled i the frontend
 - in the registration form, if transport is not selected, transport_fee should be set to 0, sounds like javascript
 
+
+sims v 2.0
+15-06-2022
+-wrap the student.save() method in a try..catch block 
+- implement a create fee structure feature?

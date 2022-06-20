@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'info',
     'financial_account',
     'datetimepicker',
-    'phonenumber_field'
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [

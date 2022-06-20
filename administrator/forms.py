@@ -12,12 +12,6 @@ class StudentRegistrationForm(forms.Form):
         ('male','Male'),
         ('female','Female')
     )
-    STUDENT_TYPE=[
-        ('continuing','Continuing'),
-        ('new','New')
-    ]
-    charge_admission_fee = forms.BooleanField(required=False,widget=forms.CheckboxInput(attrs={'class':'w3-check w3-border w3-round-small'}))
-    student_type = forms.ChoiceField(choices=STUDENT_TYPE, widget=forms.Select(attrs={'class':'w3-select w3-border w3-round-small'}))
     first_name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     middle_name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     last_name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
@@ -25,9 +19,9 @@ class StudentRegistrationForm(forms.Form):
     date_of_birth = forms.DateField(widget=forms.widgets.DateInput(attrs={'class':'w3-input w3-border w3-round-small','type':'date'}), input_formats=['%Y-%m-%d'])
     grade_admitted_to = forms.ModelChoiceField(queryset=Grade.objects.all(), widget=forms.Select(attrs={'class':'w3-input w3-border w3-round-small'}))
     primary_contact_name = forms.CharField( max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
-    primary_contact_phone_number = PhoneNumberField(widget=PhoneNumberInternationalFallbackWidget(attrs={'class':'w-input w3-round-small'}))
+    primary_contact_phone_number = forms.CharField( max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     secondary_contact_name = forms.CharField( max_length=30, required=False,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
-    secondary_contact_phone_number = PhoneNumberField(widget=PhoneNumberInternationalFallbackWidget)
+    secondary_contact_phone_number = forms.CharField( max_length=30,widget=forms.TextInput(attrs={'class':'w3-input w3-border w3-round-small'}))
     hot_lunch = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'w3-check w3-border w3-round-small'}))
     transport = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'w3-check w3-border w3-round-small'}))
     transport_fee = forms.DecimalField(widget=forms.NumberInput(attrs={'class':'w3-input w3-border w3-round-small'}), validators=[validators.MinValueValidator(limit_value=3000,message="Minimum Amount is 3000ksh !")])

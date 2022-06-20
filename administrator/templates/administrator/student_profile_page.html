@@ -49,10 +49,7 @@
               <th>Transport:</th>
               <td>{{ student.transport }} @ {{student.transport_fee}}Ksh </td>
             </tr>
-            <tr>
-              <th>Admission Fee Charged: </th>
-              <td>{{student.charge_admission_fee}}</td>
-            </tr>
+      
           </table>
         <br>
         <a href="{% url 'update_student' student.id %}" class="w3-button w3-blue w3-round-small">Update Student Details</a>
